@@ -17,7 +17,8 @@ class Parameter(models.Model):
 
 class MeasuringDevice(models.Model):
     name = models.CharField('Nazwa urządzenia', max_length=64, unique=True)
-    pin = models.PositiveSmallIntegerField('Pin', unique=True)
+    address = models.CharField('Pin lub adres', max_length=4, unique=True)
+    is_i2c = models.BooleanField("I2C", default=False)
     is_out = models.BooleanField('Wyjście', default=1)
 
     def __str__(self):

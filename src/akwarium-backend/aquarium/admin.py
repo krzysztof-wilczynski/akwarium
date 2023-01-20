@@ -10,7 +10,7 @@ class ParameterAdmin(admin.ModelAdmin):
 
 @admin.register(MeasuringDevice)
 class MeasuringDeviceAdmin(admin.ModelAdmin):
-    list_display = ['name', 'is_out', 'pin']
+    list_display = ['name', 'is_out', 'is_i2c', 'address']
 
 
 @admin.register(ExecutiveDevice)
