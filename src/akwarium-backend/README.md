@@ -13,3 +13,18 @@
 | AQUA_LOGFILE        | 'log/aquarium.log'     | Directory used to store log files                                                   |
 | TZ                  | 'Europe/Warsaw'        | ENV for Docker container setting its timezone to Europe/Warsaw                      |
 
+## Raspberry configuration
+
+| Pin number | Usage                          | Channel |
+|:----------:|--------------------------------|:-------:|
+|     4      | Nawilżacz                      |    1    |
+|     5      | Ogniwo - chłodzenie            |    3    |
+|     6      | Pompa                          |    5    |
+|     16     | Dolny wiatrak 12V              |    8    |
+|     20     | Ogniwo - ogrzewanie            |    3    |
+|     21     | Wywiew - obniżanie wilgotności |   2.1   |
+|     22     | Czujnik temperatury 1          |    -    |
+|     23     | Dolny wiatrak 5V               |    6    |
+|     24     | Górny wiatrak                  |    7    |
+|     26     | Czujnik temperatury 2          |    -    |
+|     27     | Żarówka                        |    2    |

@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 
 
@@ -16,7 +17,8 @@ class MeasurementType(models.Model):
 
 class MeasuringDevice(models.Model):
     name = models.CharField('Nazwa urządzenia', max_length=64, unique=True)
-    # pin =
+    pin = models.PositiveSmallIntegerField('Pin', unique=True)
+    is_out = models.BooleanField('Wyjście', default=1)
     measurement_type = models.ForeignKey(MeasurementType, on_delete=models.DO_NOTHING, verbose_name='Mierzone wartości')
 
     def __str__(self):
@@ -25,6 +27,26 @@ class MeasuringDevice(models.Model):
     class Meta:
         verbose_name = "Urządzenie pomiarowe"
         verbose_name_plural = "Urządzenia pomiarowe"
+        app_label = "aquarium"
+
+
+class ExecutiveDevice(models.Model):
+    name = models.CharField('Nazwa urządzenia', max_length=64, unique=True)
+    pin = models.PositiveSmallIntegerField('Pin', unique=True)
+    is_out = models.BooleanField('Wyjście', default=1)
+    state = models.BooleanField('Stan', default=1)
+    channel = models.FloatField('Kanał', null=True, blank=True)
+
+    @admin.display(description="Kanał")
+    def parsed_channel(self):
+        return f"{self.channel:g}"
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Urządzenie wykonawcze"
+        verbose_name_plural = "Urządzenia wykonawcze"
         app_label = "aquarium"
 
 
