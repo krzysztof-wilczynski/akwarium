@@ -14,7 +14,7 @@ SECRET_KEY = os.getenv('AQUA_SECRET_KEY', 'rybka-lubi-plywac')
 DEBUG = os.getenv('AQUA_DEBUG', 'FALSE').upper() == 'TRUE'
 
 ALLOWED_HOSTS = os.getenv('AQUA_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 # Application definition
 
@@ -27,11 +27,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #
     'rest_framework',
+    'corsheaders',
     #
     'aquarium'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
