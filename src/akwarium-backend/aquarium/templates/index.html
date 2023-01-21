@@ -77,7 +77,21 @@
             mdBlock.innerText = metrics.length
 
             await displayExecutiveDevicesCounter()
-            printGraphs(metrics);
+            const graphsList = printGraphs(metrics);
+
+            const chartObjects = []
+
+            for (const graph of graphsList) {
+                const newGraph = await createGraph(graph)
+                chartObjects.push(newGraph)
+            }
+
+            setInterval(() => {
+                for (const chart of chartObjects) {
+                    updateChart(chart)
+                }
+            }, 3000)
+
         })();
     </script>
 {% endblock %}

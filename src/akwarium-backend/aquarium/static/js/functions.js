@@ -34,7 +34,6 @@ function addGraph(title, id) {
     canvas.height = undefined
     chartJsContainer.appendChild(canvas)
 
-
     innerContainer.appendChild(innerContainerTitle)
     innerContainer.appendChild(chartJsContainer)
 
@@ -43,10 +42,69 @@ function addGraph(title, id) {
 }
 
 function printGraphs(metrics) {
-    console.log(metrics)
     const graphsBlock = document.getElementById('graphsFlexBox')
+    const graphIDsList = []
     metrics.forEach(metric => {
-        const newGraph = addGraph(`${metric.device.name} - ${metric.parameter.name}`, `metric-${metric.id}`)
+        const ID = `metric-${metric.id}`
+        const newGraph = addGraph(`${metric.device.name} - ${metric.parameter.name} [${metric.parameter.unit}]`, ID)
+        graphIDsList.push(ID)
         graphsBlock.appendChild(newGraph)
     })
+    return graphIDsList
+}
+
+async function createGraph(graphID) {
+    const ctx = document.getElementById(graphID)
+
+    const api_data = await getPointValues(graphID.split('-')[1])
+
+    const labels = api_data.map(x => new Date(x.timestamp).toLocaleTimeString())
+    const values = api_data.map(x => x.value)
+
+    return new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                fill: false,
+                borderColor: 'rgb(107,107,107)',
+                tension: 0.5
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    })
+}
+
+async function updateChart(chart) {
+    const api_data = await getPointValues(chart.canvas.id.split('-')[1])
+    const labels = api_data.map(x => new Date(x.timestamp).toLocaleTimeString())
+
+    const first_new_label = labels[0]
+    let new_entries = 0
+    for (const old_label of chart.data.labels) {
+        if (old_label === first_new_label) {
+            break;
+        }
+        else {
+            new_entries++
+        }
+    }
+
+    if (new_entries > 0) {
+        chart.data.labels.push(labels.reverse().slice(0, new_entries))
+        const new_data = api_data.reverse().slice(0, new_entries).map(x => x.value)
+
+        chart.data.datasets[0].data.push(new_data)
+
+        chart.data.labels = chart.data.labels.splice(new_entries)
+        chart.data.datasets[0].data = chart.data.datasets[0].data.splice(new_entries)
+        chart.update()
+    }
 }

@@ -35,3 +35,4 @@ class PointValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = PointValue
         fields = '__all__'
+

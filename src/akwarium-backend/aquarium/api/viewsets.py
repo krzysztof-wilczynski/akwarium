@@ -15,7 +15,7 @@ class PointValueViewSet(viewsets.ModelViewSet):
         else:
             queryset = PointValue.objects.all()
 
-        return queryset.order_by('timestamp')
+        return queryset.order_by('-timestamp')[:50][::-1]
 
 
 class MeasuringDeviceViewSet(viewsets.ModelViewSet):
