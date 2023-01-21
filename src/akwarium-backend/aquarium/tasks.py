@@ -93,9 +93,7 @@ def get_measurements():
 def cleanup_setpoint_entries(self, hours):
     from aquarium.models import PointValue
     from datetime import datetime, timedelta
-    from django.utils import timezone
 
     time_threshold = datetime.now() - timedelta(hours=hours)
-    print(f"TRESHOLD: {time_threshold}")
     old_entries = PointValue.objects.filter(timestamp__lte=time_threshold)
     old_entries.delete()

@@ -4,7 +4,7 @@
 |---------------------|------------------------|-------------------------------------------------------------------------------------|
 | AQUA_SECRET_KEY     | 'rybka-lubi-plywac'    | Django secret key - **remember not to use default one in a production environment** |
 | AQUA_ALLOWED_HOSTS  | 'localhost, 127.0.0.1' | Host (addresses) that can be used to access app separated by comma                  |
-| AQUA_DEBUG          | FALSE                  | Boolean asking if app should be running in debug mode                               |
+| AQUA_DEBUG          | False                  | Boolean asking if app should be running in debug mode                               |
 | AQUA_MYSQL_HOST     | '127.0.0.1'            | MySQL DB host                                                                       |
 | AQUA_MYSQL_USER     | 'root'                 | MySQL DB username                                                                   |
 | AQUA_MYSQL_PASSWORD | 'rootpass'             | MySQL DB password                                                                   |
@@ -17,10 +17,10 @@
 
 | Pin number | Usage                          | Channel |
 |:----------:|--------------------------------|:-------:|
-|     4      | Nawilżacz                      |    1    |
+|     4      | Ogniwo Peltiera - załączenie   |    1    |
 |     5      | Ogniwo - chłodzenie            |    4    |
 |     6      | Pompa                          |    5    |
-|     16     | Dolny wiatrak 12V              |    8    |
+|     16     | Nawilżacz                      |    8    |
 |     20     | Ogniwo - ogrzewanie            |    3    |
 |     21     | Wywiew - obniżanie wilgotności |   2.1   |
 |     22     | Czujnik temperatury 1          |    -    |
