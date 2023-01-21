@@ -4,6 +4,8 @@
 {% block head_extras %}
     <script src="{% static 'js/axios.js' %}"></script>
     <script src="{% static 'js/endpoints.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+    <script src="{% static 'js/chart.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -62,17 +64,6 @@
 
     <!-- wykresy -->
     <div class="flex flex-row flex-wrap flex-grow mt-2" id="graphsFlexBox">
-        <div class="w-full md:w-1/2 p-3">
-            <!--Graph Card-->
-            <div class="bg-white border rounded shadow">
-                <div class="border-b p-3">
-                    <h5 class="font-bold uppercase text-gray-600">Graph</h5>
-                </div>
-                <div class="p-5">
-                    <canvas id="chartjs-7" class="chartjs" width="undefined" height="undefined"></canvas>
-                </div>
-            </div>
-        </div>
     </div>
 
 
@@ -81,20 +72,12 @@
 {% block script %}
     <script>
         (async () => {
-            // md - measurementDevices
             const mdBlock = document.getElementById('measurementDevicesNumber')
-            const mdResult = await getMetrics()
-            console.log(mdResult)
-            mdBlock.innerText = mdResult.length;
+            const metrics  = await getMetricsCounter()
+            mdBlock.innerText = metrics.length
 
-            // ed - executiveDevices
-            const edBlock = document.getElementById('executiveDevicesNumber')
-            const edResult = await getExecutiveDevice()
-            edBlock.innerText = edResult.length
-
-            const graphsBlock = document.getElementById('graphsFlexBox')
-
-
+            await displayExecutiveDevicesCounter()
+            printGraphs(metrics);
         })();
     </script>
 {% endblock %}
