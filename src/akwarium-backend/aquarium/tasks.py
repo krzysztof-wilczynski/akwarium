@@ -86,3 +86,7 @@ def get_measurements():
                                                             parameter=Parameter.objects.get(
                                                                 processed_name='soil_temperature'))
             soil_temperature_pv.save()
+
+
+# @shared_task()
+# def check_setpoints():

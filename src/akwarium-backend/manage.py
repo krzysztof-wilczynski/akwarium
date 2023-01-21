@@ -21,5 +21,5 @@ def main():
 if __name__ == '__main__':
     main()
 
-#TODO: funkcja do przeliczania dziwnych odczytów gleby na normalne procenty z wilgotnością
-#TODO: I2C
+#TODO: cleanup przy wyłączeniu programu
+#TODO: czyszczenie bazy danych przy określonej liczbie wpisów
