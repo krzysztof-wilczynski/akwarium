@@ -1,8 +1,8 @@
-async function getMeasurementDevice(id = undefined) {
+async function getMetrics(id = undefined) {
     try {
         // TODO: kurwa mam jakieś zaćmienie umysłu,
         //  to nie może tak wyglądać
-        let URL = '/api/measuring_device'
+        let URL = '/api/device_parameter'
         if (id) {
             URL += `?id=${id}`
         }

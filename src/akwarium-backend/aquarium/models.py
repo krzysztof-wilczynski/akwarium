@@ -29,6 +29,7 @@ class MeasuringDevice(models.Model):
         verbose_name = "Urządzenie pomiarowe"
         verbose_name_plural = "Urządzenia pomiarowe"
         app_label = "aquarium"
+        ordering = ("address",)
 
 
 class ExecutiveDevice(models.Model):
@@ -49,6 +50,7 @@ class ExecutiveDevice(models.Model):
         verbose_name = "Urządzenie wykonawcze"
         verbose_name_plural = "Urządzenia wykonawcze"
         app_label = "aquarium"
+        ordering = ("pin",)
 
 
 class Setpoint(models.Model):
@@ -64,21 +66,6 @@ class Setpoint(models.Model):
         app_label = "aquarium"
 
 
-class PointValue(models.Model):
-    device = models.ForeignKey(MeasuringDevice, on_delete=models.CASCADE, verbose_name='Urządzenie')
-    value = models.FloatField('Wartość pomiaru')
-    parameter = models.ForeignKey(Parameter, on_delete=models.CASCADE, verbose_name="Parametr")
-    timestamp = models.DateTimeField('Data pomiaru', auto_now_add=True)
-
-    def __str__(self):
-        return f"[{self.timestamp}] {self.device.name} - {self.value}"
-
-    class Meta:
-        verbose_name = "Pomiar"
-        verbose_name_plural = "Pomiary"
-        app_label = "aquarium"
-
-
 class DeviceParameterMeasured(models.Model):
     device = models.ForeignKey(MeasuringDevice, on_delete=models.CASCADE, verbose_name='Urządzenie')
     parameter = models.ForeignKey(Parameter, on_delete=models.CASCADE, verbose_name='Parametr')
@@ -90,3 +77,31 @@ class DeviceParameterMeasured(models.Model):
         verbose_name = "Wartość zbierana przez urządzenie"
         verbose_name_plural = "Wartości zbierane przez urządzenia"
         app_label = "aquarium"
+
+
+class PointValue(models.Model):
+    device_parameter = models.ForeignKey(DeviceParameterMeasured, on_delete=models.CASCADE, verbose_name='Urządzenie i parametr')
+    value = models.FloatField('Wartość pomiaru')
+    timestamp = models.DateTimeField('Data pomiaru', auto_now_add=True)
+
+    @admin.display(description="Wartość")
+    def custom_value(self):
+        return f"{self.value}{self.device_parameter.parameter.unit}"
+
+    @admin.display(description="Urządzenie")
+    def device_name(self):
+        return self.device_parameter.device.name
+
+    @admin.display(description="Parametr")
+    def parameter_name(self):
+        return self.device_parameter.parameter.name
+
+    def __str__(self):
+        return f"[{self.timestamp}] {self.device_parameter.device.name} - {self.value}"
+
+    class Meta:
+        verbose_name = "Pomiar"
+        verbose_name_plural = "Pomiary"
+        app_label = "aquarium"
+
+

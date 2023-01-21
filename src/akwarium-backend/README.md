@@ -28,3 +28,9 @@
 |     24     | Górny wiatrak                  |    7    |
 |     26     | Czujnik temperatury 2          |    -    |
 |     27     | Żarówka                        |    2    |
+
+### Chłodzenie
+PIN 20 - 0, PIN 5 - 0, PIN 4 - 0, PIN 23 - 0, PIN 24 - 0
+
+### Grzanie
+PIN 4 - 1, PIN 5 - 1, PIN 20 - 1, PIN 4 - 0

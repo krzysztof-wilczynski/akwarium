@@ -1,12 +1,19 @@
 from rest_framework import serializers
 
-from aquarium.models import PointValue, MeasuringDevice, Parameter, ExecutiveDevice
+from aquarium.models import PointValue, MeasuringDevice, Parameter, ExecutiveDevice, DeviceParameterMeasured
 
 
 class MeasuringDeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeasuringDevice
         fields = ['id', 'name']
+
+
+class DeviceParameterMeasuredSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeviceParameterMeasured
+        fields = '__all__'
+        depth = 1
 
 
 class ExecutiveDeviceSerializer(serializers.ModelSerializer):
@@ -22,9 +29,9 @@ class ParameterSerializer(serializers.ModelSerializer):
 
 
 class PointValueSerializer(serializers.ModelSerializer):
-    device = MeasuringDeviceSerializer()
-    parameter = ParameterSerializer()
+    # device = MeasuringDeviceSerializer()
+    # parameter = ParameterSerializer()
 
     class Meta:
         model = PointValue
-        exclude = ['id']
+        fields = '__all__'

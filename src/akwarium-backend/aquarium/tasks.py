@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # Kiedy uruchamia się program, inicjalizowane są wszystkie urządzenia wykonawcze w określonym stanie
 @shared_task()
 def startup():
-    from aquarium.models import ExecutiveDevice
+    from aquarium.models import ExecutiveDevice, DeviceParameterMeasured
     GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -31,7 +31,7 @@ def startup():
 
 @shared_task()
 def get_measurements():
-    from aquarium.models import MeasuringDevice, PointValue, Parameter
+    from aquarium.models import MeasuringDevice, PointValue, DeviceParameterMeasured
     # pobierz wartości z czujników one wire
     measuring_devices = MeasuringDevice.objects.filter(is_i2c=False)
 
@@ -47,17 +47,19 @@ def get_measurements():
                     humidity_parameter = device.deviceparametermeasured_set.filter(
                         parameter__name='humidity')
                     if humidity_parameter is not None and result.humidity is not None:
-                        humidity_pv = PointValue.objects.create(device=device, value=result.humidity,
-                                                                parameter=Parameter.objects.get(
-                                                                    processed_name="humidity"))
+                        device_parameter = DeviceParameterMeasured.objects.get(
+                            parameter__processed_name='humidity', device=device)
+                        humidity_pv = PointValue.objects.create(device_parameter=device_parameter,
+                                                                value=result.humidity)
                         humidity_pv.save()
 
                     air_parameter = device.deviceparametermeasured_set.filter(
                         parameter__name='air_temperature')
                     if air_parameter is not None and result.temperature is not None:
-                        temperature_pv = PointValue.objects.create(device=device, value=result.temperature,
-                                                                   parameter=Parameter.objects.get(
-                                                                       processed_name="air_temperature"))
+                        device_parameter = DeviceParameterMeasured.objects.get(
+                            parameter__processed_name='air_temperature', device=device)
+                        temperature_pv = PointValue.objects.create(device_parameter=device_parameter,
+                                                                   value=result.temperature)
                         temperature_pv.save()
                     break
                 if retries >= 50:
@@ -75,17 +77,21 @@ def get_measurements():
         moisture = ss.moisture_read()
         soil_temperature = ss.get_temp()
 
-        moisture_parameter = device.deviceparametermeasured_set.filter(parameter__name='moisture')
+        moisture_parameter = device.deviceparametermeasured_set.filter(parameter__processed_name='moisture')
         if moisture is not None and moisture_parameter is not None:
-            moisture_pv = PointValue.objects.create(device=device, value=get_moisture_percentage(moisture), parameter=
-            Parameter.objects.get(processed_name='moisture'))
+            device_parameter = DeviceParameterMeasured.objects.get(device=device,
+                                                                   parameter__processed_name='moisture')
+            moisture_pv = PointValue.objects.create(device_parameter=device_parameter,
+                                                    value=get_moisture_percentage(moisture))
             moisture_pv.save()
 
-        soil_temperature_parameter = device.deviceparametermeasured_set.filter(parameter__name='soil_temperature')
+        soil_temperature_parameter = device.deviceparametermeasured_set.filter(
+            parameter__processed_name='soil_temperature')
         if soil_temperature is not None and soil_temperature_parameter is not None:
-            soil_temperature_pv = PointValue.objects.create(device=device, value=round(soil_temperature, 2),
-                                                            parameter=Parameter.objects.get(
-                                                                processed_name='soil_temperature'))
+            device_parameter = DeviceParameterMeasured.objects.get(device=device,
+                                                                   parameter__processed_name='soil_temperature')
+            soil_temperature_pv = PointValue.objects.create(device_parameter=device_parameter,
+                                                            value=round(soil_temperature, 2))
             soil_temperature_pv.save()
 
 

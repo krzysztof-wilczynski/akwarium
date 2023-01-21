@@ -1,25 +1,21 @@
 from rest_framework import viewsets
 
-from aquarium.api.serializers import PointValueSerializer, MeasuringDeviceSerializer, ExecutiveDeviceSerializer
-from aquarium.models import PointValue, MeasuringDevice, ExecutiveDevice
+from aquarium.api.serializers import PointValueSerializer, MeasuringDeviceSerializer, ExecutiveDeviceSerializer, \
+    DeviceParameterMeasuredSerializer
+from aquarium.models import PointValue, MeasuringDevice, ExecutiveDevice, DeviceParameterMeasured
 
 
 class PointValueViewSet(viewsets.ModelViewSet):
     serializer_class = PointValueSerializer
 
     def get_queryset(self):
-        # TODO: do przepisania, pobieranie najpierw wszystkiego jest w chuj nieefektywne
-        device_id = self.request.query_params.get('device_id')
-        parameter = self.request.query_params.get('parameter')
+        id = self.request.query_params.get('id')
+        if id:
+            queryset = PointValue.objects.filter(device_parameter=id)
+        else:
+            queryset = PointValue.objects.all()
 
-        queryset = PointValue.objects.all().order_by('timestamp')
-
-        if device_id is not None:
-            queryset.filter(device_id=device_id)
-        if parameter is not None:
-            queryset.filter(parameter__processed_name=parameter)
-
-        return queryset
+        return queryset.order_by('timestamp')
 
 
 class MeasuringDeviceViewSet(viewsets.ModelViewSet):
@@ -44,5 +40,16 @@ class ExecutiveDeviceViewSet(viewsets.ModelViewSet):
             queryset = ExecutiveDevice.objects.filter(id=device_id)
             return queryset
         else:
-            queryset = ExecutiveDevice.objects.all()
+            return ExecutiveDevice.objects.all()
+
+
+class DeviceParameterMeasuredViewSet(viewsets.ModelViewSet):
+    serializer_class = DeviceParameterMeasuredSerializer
+
+    def get_queryset(self):
+        metric_id = self.request.query_params.get('id')
+        if metric_id:
+            queryset = DeviceParameterMeasured.objects.filter(id=id)
             return queryset
+        else:
+            return DeviceParameterMeasured.objects.all()
