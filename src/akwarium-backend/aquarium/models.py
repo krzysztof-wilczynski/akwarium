@@ -4,6 +4,7 @@ from django.db import models
 
 class Parameter(models.Model):
     name = models.CharField('Nazwa jednostki', max_length=32, unique=True)
+    processed_name = models.CharField('Angielska nazwa', max_length=32, unique=True)
     unit = models.CharField('Jednostka', max_length=5)
 
     def __str__(self):
@@ -66,6 +67,7 @@ class Setpoint(models.Model):
 class PointValue(models.Model):
     device = models.ForeignKey(MeasuringDevice, on_delete=models.CASCADE, verbose_name='Urządzenie')
     value = models.FloatField('Wartość pomiaru')
+    parameter = models.ForeignKey(Parameter, on_delete=models.CASCADE, verbose_name="Parametr")
     timestamp = models.DateTimeField('Data pomiaru', auto_now_add=True)
 
     def __str__(self):

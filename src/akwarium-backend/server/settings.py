@@ -92,6 +92,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = "django-cache"
 CELERY_TIMEZONE = "Europe/Warsaw"
+CELERY_TASK_ALWAYS_EAGER = os.getenv('AQUA_DEBUG', 'FALSE').upper() == 'TRUE'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

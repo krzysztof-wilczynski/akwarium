@@ -20,7 +20,7 @@ class ExecutiveDeviceAdmin(admin.ModelAdmin):
 
 @admin.register(PointValue)
 class PointValueAdmin(admin.ModelAdmin):
-    list_display = ['device', 'value', 'timestamp']
+    list_display = ['device', 'value', 'parameter', 'timestamp']
 
 
 @admin.register(Setpoint)

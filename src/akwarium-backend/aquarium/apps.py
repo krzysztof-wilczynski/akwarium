@@ -1,10 +1,8 @@
 from django.apps import AppConfig
 
-from tasks import startup
-
 
 class AquariumConfig(AppConfig):
     name = 'aquarium'
+    verbose_name = "Akwarium"
 
-    def ready(self):
-        startup()
+
