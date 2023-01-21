@@ -1,8 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from api.viewsets import PointValueViewSet, MeasuringDeviceViewSet
-from views import index, settings
+from aquarium.api.viewsets import PointValueViewSet, MeasuringDeviceViewSet
+from aquarium.views import index, settings
 
 app_name = 'aquarium'
 

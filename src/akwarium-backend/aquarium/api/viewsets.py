@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from api.serializers import PointValueSerializer, MeasuringDeviceSerializer
+from aquarium.api.serializers import PointValueSerializer, MeasuringDeviceSerializer
 from aquarium.models import PointValue, MeasuringDevice
 
 
@@ -27,7 +27,8 @@ class MeasuringDeviceViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         device_id = self.request.query_params.get('id')
-        if device_id is not None:
+        print(self.request.query_params)
+        if device_id:
             queryset = MeasuringDevice.objects.filter(id=device_id)
             return queryset
         else:
