@@ -18,10 +18,10 @@
 | Pin number | Usage                          | Channel |
 |:----------:|--------------------------------|:-------:|
 |     4      | Ogniwo Peltiera - załączenie   |    1    |
-|     5      | Ogniwo - chłodzenie            |    4    |
+|     5      | Ogniwo GND                     |    4    |
 |     6      | Pompa                          |    5    |
 |     16     | Nawilżacz                      |    8    |
-|     20     | Ogniwo - ogrzewanie            |    3    |
+|     20     | Ogniwo+                        |    3    |
 |     21     | Wywiew - obniżanie wilgotności |   2.1   |
 |     22     | Czujnik temperatury 1          |    -    |
 |     23     | Dolny wiatrak 5V               |    6    |
