@@ -1,12 +1,11 @@
-from celery import shared_task
+# from celery import shared_task
 import RPi.GPIO as GPIO
 
-from aquarium.models import ExecutiveDevice
 
-
-@shared_task
+# @shared_task
 # Kiedy uruchamia się program, inicjalizowane są wszystkie urządzenia wykonawcze w określonym stanie
 def startup():
+    from aquarium.models import ExecutiveDevice
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
 

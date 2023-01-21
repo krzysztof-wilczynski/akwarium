@@ -1,7 +1,9 @@
 import os
+import logging
 from celery import Celery, signals
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', "server.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
+
 app = Celery("server")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
@@ -16,3 +18,13 @@ def setup_log_format(sender, conf, **kwargs):
 
 
 app.autodiscover_tasks()
+
+
+@app.task(bind=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')
+
+
+@signals.setup_logging.connect
+def setup_celery_logging(**kwargs):
+    return logging.getLogger('celery')
