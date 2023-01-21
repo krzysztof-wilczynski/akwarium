@@ -20,6 +20,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-#TODO: cleanup przy wyłączeniu programu
-#TODO: czyszczenie bazy danych przy określonej liczbie wpisów

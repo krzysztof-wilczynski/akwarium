@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 @shared_task()
 def startup():
     from aquarium.models import ExecutiveDevice
+    GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
 
@@ -88,5 +89,12 @@ def get_measurements():
             soil_temperature_pv.save()
 
 
-# @shared_task()
-# def check_setpoints():
+@shared_task(bind=True)
+def cleanup_setpoint_entries(self, hours):
+    from aquarium.models import PointValue
+    from datetime import timedelta
+    from django.utils import timezone
+
+    time_threshold = timezone.now() - timedelta(hours)
+    old_entries = PointValue.objects.filter(timestamp__gte=time_threshold)
+    old_entries.delete()

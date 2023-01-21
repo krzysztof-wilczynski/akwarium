@@ -18,7 +18,7 @@
 | Pin number | Usage                          | Channel |
 |:----------:|--------------------------------|:-------:|
 |     4      | Nawilżacz                      |    1    |
-|     5      | Ogniwo - chłodzenie            |    3    |
+|     5      | Ogniwo - chłodzenie            |    4    |
 |     6      | Pompa                          |    5    |
 |     16     | Dolny wiatrak 12V              |    8    |
 |     20     | Ogniwo - ogrzewanie            |    3    |
