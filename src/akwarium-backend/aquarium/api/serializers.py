@@ -1,11 +1,17 @@
 from rest_framework import serializers
 
-from aquarium.models import PointValue, MeasuringDevice, Parameter
+from aquarium.models import PointValue, MeasuringDevice, Parameter, ExecutiveDevice
 
 
 class MeasuringDeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeasuringDevice
+        fields = ['id', 'name']
+
+
+class ExecutiveDeviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExecutiveDevice
         fields = ['id', 'name']
 
 
