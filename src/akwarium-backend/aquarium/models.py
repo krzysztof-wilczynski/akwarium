@@ -38,6 +38,7 @@ class ExecutiveDevice(models.Model):
     is_out = models.BooleanField('Wyjście', default=1)
     state = models.BooleanField('Stan', default=1)
     channel = models.FloatField('Kanał', null=True, blank=True)
+    cron = models.BooleanField('Przełączanie przez cron', default=False)
 
     @admin.display(description="Kanał")
     def parsed_channel(self):
@@ -75,7 +76,7 @@ class TaskSequence(models.Model):
     comparator = models.CharField("Komparator", max_length=4)
 
     def __str__(self):
-        return f"{self.name} - {self.is_active}"
+        return f"{self.name}"
 
     class Meta:
         verbose_name = "Sekwencja układu"

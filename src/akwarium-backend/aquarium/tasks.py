@@ -160,3 +160,14 @@ def run_sequence(self, setpoint_id):
         GPIO.setup(task.device.pin, GPIO.OUT)
         GPIO.output(task.device.pin, task.output_value)
         time.sleep(task.delay)
+
+
+#
+@shared_task(bind=True)
+def switch_light(self, state):
+    from aquarium.models import ExecutiveDevice
+
+    lightbulbs = ExecutiveDevice.objects.filter(cron=True)
+    for device in lightbulbs:
+        GPIO.setup(device.pin, GPIO.OUT)
+        GPIO.output(device.pin, state)

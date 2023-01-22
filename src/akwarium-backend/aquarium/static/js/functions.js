@@ -139,6 +139,7 @@ function printSetpoints(setpoints) {
         input.setAttribute("id", sp.id)
         input.setAttribute("type", "number")
         input.setAttribute("placeholder", sp.value)
+        input.setAttribute("value", sp.value)
         input.setAttribute("min", "0")
         input.setAttribute("step", "0.1")
 
