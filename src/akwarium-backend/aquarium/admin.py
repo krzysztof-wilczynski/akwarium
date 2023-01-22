@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from aquarium.models import MeasuringDevice, Parameter, PointValue, ExecutiveDevice, Setpoint, DeviceParameterMeasured
+from aquarium.models import MeasuringDevice, Parameter, PointValue, ExecutiveDevice, Setpoint, DeviceParameterMeasured, \
+    TaskSequence, TaskSequenceStep, TaskPrecedingSequence
 
 
 @admin.register(Parameter)
@@ -31,3 +32,18 @@ class SetPointAdmin(admin.ModelAdmin):
 @admin.register(DeviceParameterMeasured)
 class DeviceParameterMeasuredAdmin(admin.ModelAdmin):
     list_display = ['device', 'parameter']
+
+
+@admin.register(TaskSequence)
+class TaskSequenceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'hysteresis', 'is_active', 'setpoint']
+
+
+@admin.register(TaskSequenceStep)
+class TaskSequenceStepAdmin(admin.ModelAdmin):
+    list_display = ['sequence', 'device', 'order', 'delay', 'output_value']
+
+
+@admin.register(TaskPrecedingSequence)
+class TaskPrecedingSequenceAdmin(admin.ModelAdmin):
+    list_display = ["sequence_to_check", "executed_sequence"]

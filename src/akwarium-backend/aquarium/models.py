@@ -66,6 +66,54 @@ class Setpoint(models.Model):
         app_label = "aquarium"
 
 
+class TaskSequence(models.Model):
+    name = models.CharField('Nazwa sekwencji', max_length=128)
+    processed_name = models.CharField('Angielska nazwa', max_length=128)
+    is_active = models.BooleanField('Czy aktywna', default=False)
+    hysteresis = models.SmallIntegerField('Histereza', default=2)
+    setpoint = models.ForeignKey(Setpoint, on_delete=models.CASCADE, null=True, blank=True,
+                                 verbose_name="Powiązana wartość zadana")
+
+    def __str__(self):
+        return f"{self.name} - {self.is_active}"
+
+    class Meta:
+        verbose_name = "Sekwencja układu"
+        verbose_name_plural = "Sekwencje układów"
+        app_label = "aquarium"
+
+
+class TaskPrecedingSequence(models.Model):
+    sequence_to_check = models.ForeignKey(TaskSequence, on_delete=models.CASCADE, verbose_name="Sekwencja sprawdzana",
+                                          related_name="task_sequence_checked")
+    executed_sequence = models.ForeignKey(TaskSequence, on_delete=models.CASCADE, verbose_name="Sekwencja wykonywana",
+                                          related_name="task_sequence_executed")
+
+    def __str__(self):
+        return f"Wykonaj {self.executed_sequence.name} jeśli {self.sequence_to_check.name} jest aktywna"
+
+    class Meta:
+        verbose_name = "Warunek wykonywania sekwencji"
+        verbose_name_plural = "Warunki wykonywania sekwencji"
+        app_label = "aquarium"
+
+
+class TaskSequenceStep(models.Model):
+    sequence = models.ForeignKey(TaskSequence, on_delete=models.CASCADE, verbose_name="Sekwencja")
+    device = models.ForeignKey(ExecutiveDevice, on_delete=models.CASCADE, verbose_name="Urządzenie wykonawcze")
+    order = models.PositiveSmallIntegerField("Kolejność wykonywania", default=1)
+    delay = models.PositiveSmallIntegerField("Opóźnienie po wykonaniu", default=1000)
+    output_value = models.BooleanField("Stan", default=True)
+
+    def __str__(self):
+        return f"{self.sequence} - {self.device.name}"
+
+    class Meta:
+        verbose_name = "Powiązanie urządzenia w sekwencji"
+        verbose_name_plural = "Powiązania urządzeń w sekwencjach"
+        app_label = "aquarium"
+
+
 class DeviceParameterMeasured(models.Model):
     device = models.ForeignKey(MeasuringDevice, on_delete=models.CASCADE, verbose_name='Urządzenie')
     parameter = models.ForeignKey(Parameter, on_delete=models.CASCADE, verbose_name='Parametr')
@@ -80,7 +128,8 @@ class DeviceParameterMeasured(models.Model):
 
 
 class PointValue(models.Model):
-    device_parameter = models.ForeignKey(DeviceParameterMeasured, on_delete=models.CASCADE, verbose_name='Urządzenie i parametr')
+    device_parameter = models.ForeignKey(DeviceParameterMeasured, on_delete=models.CASCADE,
+                                         verbose_name='Urządzenie i parametr')
     value = models.FloatField('Wartość pomiaru')
     timestamp = models.DateTimeField('Data pomiaru', auto_now_add=True)
 
@@ -103,5 +152,3 @@ class PointValue(models.Model):
         verbose_name = "Pomiar"
         verbose_name_plural = "Pomiary"
         app_label = "aquarium"
-
-

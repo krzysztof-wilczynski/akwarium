@@ -14,7 +14,12 @@ logger = logging.getLogger(__name__)
 # Kiedy uruchamia się program, inicjalizowane są wszystkie urządzenia wykonawcze w określonym stanie
 @shared_task()
 def startup():
-    from aquarium.models import ExecutiveDevice, DeviceParameterMeasured
+    from aquarium.models import ExecutiveDevice, DeviceParameterMeasured, TaskSequence
+
+    # wyczyść kolejkę brokera
+    # ustaw wszystkie sekwencje jako wyłączone
+    TaskSequence.objects.filter().update(is_active=False)
+
     GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -94,6 +99,8 @@ def get_measurements():
                                                             value=round(soil_temperature, 2))
             soil_temperature_pv.save()
 
+    check_setpoints.delay()
+
 
 @shared_task(bind=True)
 def cleanup_setpoint_entries(self, hours):
@@ -103,3 +110,47 @@ def cleanup_setpoint_entries(self, hours):
     time_threshold = datetime.now() - timedelta(hours=hours)
     old_entries = PointValue.objects.filter(timestamp__lte=time_threshold)
     old_entries.delete()
+
+
+@shared_task()
+def check_setpoints():
+    from aquarium.models import Setpoint, PointValue
+
+    setpoints = Setpoint.objects.all()
+    for setpoint in setpoints:
+        last_value = PointValue.objects.filter(
+            device_parameter__parameter__processed_name=setpoint.parameter.processed_name).last()
+
+        # sekwencja powiązana z setpointem, zawsze powinna być tylko jedna
+        sequence = setpoint.tasksequence_set.first()
+
+        print(setpoint.value, sequence.hysteresis, last_value.value, sequence.is_active)
+        if setpoint.value + sequence.hysteresis > last_value.value and sequence.is_active is False:
+            print("KURWA ZIMNO GRZEJ PLS")
+            run_sequence.delay(sequence.id)
+
+        # if setpoint.is_max and last_value.value > setpoint.value:
+        #     # odpal taska
+        #     pass
+        #
+        # if setpoint.is_max is False and last_value.value < setpoint.value and setpoint.sequence.is_active is False:
+        #
+        # elif setpoint.is_max is False and last_value.value + histereza > setpoint.value and setpoint.sequence.is_active:
+        #     print("ALE HALO PANIE JUŻ NIE GRZEJ")
+
+
+@shared_task(bind=True)
+def run_sequence(self, setpoint_id):
+    import time
+    from aquarium.models import TaskSequence
+
+    sequence = TaskSequence.objects.get(id=setpoint_id)
+    tasks = sequence.tasksequencestep_set.all().order_by('order')
+
+    for task in tasks:
+        GPIO.setup(task.device.pin, GPIO.OUT)
+        GPIO.output(task.device.pin, task.output_value)
+        time.sleep(task.delay)
+
+    sequence.is_active = True
+    sequence.save()
