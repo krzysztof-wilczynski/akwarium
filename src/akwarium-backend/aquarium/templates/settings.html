@@ -26,6 +26,53 @@
                 </tfoot>
             </table>
         </div>
+
+        <hr class="border-b-1 border-gray-400 my-8 mx-4"/>
+
+        <div class="w-full p-3 relative overflow-x-auto">
+            <table class="w-full bg-white border rounded shadow">
+                <thead class="text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Zadanie</th>
+                    <th scope="col" class="px-6 py-3">Aktualna godzina</th>
+                    <th scope="col" class="px-6 py-3">Nowa godzina</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="border-b">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">Włącz oświetlenie</th>
+                    <td class="px-6 py-4 text-center" id="turnOnHour"></td>
+                    <td class="px-6 py-4">
+                        <input type="time"
+                               class="shadow appearance-none border rounded
+                               w-full py-2 px-3 text-gray-700 leading-tight
+                                focus:outline-none focus:shadow-outline" id="formLightOn">
+                    </td>
+                </tr>
+                <tr class="border-b">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">Wyłącz oświetlenie
+                    </th>
+                    <td class="px-6 py-4 text-center" id="turnOffHour"></td>
+                    <td class="px-6 py-4">
+                        <input type="time"
+                               class="shadow appearance-none border rounded
+                               w-full py-2 px-3 text-gray-700 leading-tight
+                                focus:outline-none focus:shadow-outline" id="formLightOff">
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <th scope="row" class="px-6 py-3">
+                        <input type="button" id="sendHoursButton" value="Prześlij" class="hover:cursor-pointer
+                        bg-gray-100 py-2 px-6 rounded hover:bg-gray-700 hover:text-white transition duration-200"
+                        >
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 {% endblock %}
 {% block script %}
@@ -62,9 +109,24 @@
                     await postSetpoints(postData)
                     location.reload()
                 }
-
             })
 
+            const lightHours = await getLightHours();
+            const lightOnDiv = document.getElementById('turnOnHour')
+            const lightOffDiv = document.getElementById('turnOffHour')
+            lightOnDiv.innerText = `codziennie o ${lightHours.on}`;
+            lightOffDiv.innerText = `codziennie o ${lightHours.off}`;
+
+            const inputOn = document.getElementById('formLightOn')
+            const inputOff = document.getElementById('formLightOff')
+            inputOn.setAttribute('value', lightHours.on)
+            inputOff.setAttribute('value', lightHours.off)
+
+            const sendHoursButton = document.getElementById("sendHoursButton")
+            sendHoursButton.addEventListener("click", async () => {
+                await updateLightHours({"on": inputOn.value, "off": inputOff.value})
+                location.reload()
+            })
         })()
     </script>
 {% endblock %}

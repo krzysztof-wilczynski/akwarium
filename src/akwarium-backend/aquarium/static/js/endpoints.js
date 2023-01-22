@@ -46,3 +46,25 @@ async function postSetpoints(data) {
         console.log(error)
     }
 }
+
+async function getLightHours() {
+    try {
+        const {data} = await axios.get('/api/light_hours/')
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function updateLightHours(data) {
+    try {
+        return await axios.post(`/api/light_hours/`, {data},
+            {
+                withCredentials: true,
+                xsrfCookieName: 'csrftoken',
+                xsrfHeaderName: 'X-CSRFToken'
+            })
+    } catch (error) {
+        console.log(error)
+    }
+}
