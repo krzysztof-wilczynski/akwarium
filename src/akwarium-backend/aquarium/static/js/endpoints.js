@@ -33,3 +33,16 @@ async function getSetpoints(id = "") {
         console.log(error)
     }
 }
+
+async function postSetpoints(data) {
+    try {
+        return await axios.post(`/api/update_setpoints/`, {data},
+            {
+                withCredentials: true,
+                xsrfCookieName: 'csrftoken',
+                xsrfHeaderName: 'X-CSRFToken'
+            })
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -40,7 +40,7 @@
             })
 
             const sendButton = document.getElementById("sendButton")
-            sendButton.addEventListener("click", () => {
+            sendButton.addEventListener("click", async () => {
                 let valid_values = true
                 const inputs = document.querySelectorAll("input:not([type='button'])")
                 for (const input of inputs) {
@@ -52,6 +52,15 @@
                         errorP.innerText = "Zadana wartość musi być większa od zera!"
                         valid_values = false
                     }
+                }
+
+                if (valid_values) {
+                    const postData = []
+                    for (const input of inputs) {
+                        postData.push({"id": input.id, "value": input.value})
+                    }
+                    await postSetpoints(postData)
+                    location.reload()
                 }
 
             })
