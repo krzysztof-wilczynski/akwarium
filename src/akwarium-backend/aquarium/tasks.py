@@ -16,9 +16,11 @@ logger = logging.getLogger(__name__)
 def startup():
     from aquarium.models import ExecutiveDevice, DeviceParameterMeasured, TaskSequence
 
-    # wyczyść kolejkę brokera
-    # ustaw wszystkie sekwencje jako wyłączone
-    TaskSequence.objects.filter().update(is_active=False)
+    # ustaw wszystkie sekwencje zgodnie ze stanem początkowym
+    sequences = TaskSequence.objects.all()
+    for seq in sequences:
+        seq.is_active = seq.startup_value
+        seq.save()
 
     GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)

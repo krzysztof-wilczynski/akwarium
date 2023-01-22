@@ -89,7 +89,7 @@
             const sendButton = document.getElementById("sendButton")
             sendButton.addEventListener("click", async () => {
                 let valid_values = true
-                const inputs = document.querySelectorAll("input:not([type='button'])")
+                const inputs = document.querySelectorAll("input[type='number']:not([type='button'])")
                 for (const input of inputs) {
                     const errorP = document.getElementById(`error-${input.id}`)
                     errorP.innerText = ""

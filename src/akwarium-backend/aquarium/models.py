@@ -74,6 +74,7 @@ class TaskSequence(models.Model):
     setpoint = models.ForeignKey(Setpoint, on_delete=models.CASCADE, null=True, blank=True,
                                  verbose_name="Powiązana wartość zadana")
     comparator = models.CharField("Komparator", max_length=4)
+    startup_value = models.BooleanField('Stan przy uruchomieniu', default=False)
 
     def __str__(self):
         return f"{self.name}"

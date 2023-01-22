@@ -17,7 +17,7 @@
 
 | Pin number | Usage                          | Channel |
 |:----------:|--------------------------------|:-------:|
-|     4      | Ogniwo Peltiera - załączenie   |    1    |
+|     4      | Ogniwo Peltiera - załączenie   |  1 30   |
 |     5      | Ogniwo GND                     |    4    |
 |     6      | Pompa                          |    5    |
 |     16     | Nawilżacz                      |    8    |
