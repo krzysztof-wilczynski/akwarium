@@ -55,7 +55,7 @@ class ExecutiveDevice(models.Model):
 
 class Setpoint(models.Model):
     parameter = models.ForeignKey(Parameter, on_delete=models.CASCADE, verbose_name="Parametr")
-    value = models.PositiveSmallIntegerField('Zadana wartość')
+    value = models.FloatField('Zadana wartość')
 
     def __str__(self):
         return f"{self.parameter.name} - {self.value}{self.parameter.unit}"

@@ -13,7 +13,7 @@ class UpdateSetpoints(APIView):
 
         for setpoint in data:
             sp_obj = Setpoint.objects.get(id=setpoint['id'])
-            sp_obj.value = setpoint['value']
+            sp_obj.value = float(setpoint['value'])
             sp_obj.save()
 
         return HttpResponse(status=200)

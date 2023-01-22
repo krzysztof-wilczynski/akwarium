@@ -103,6 +103,7 @@ def get_measurements():
 
 
 @shared_task(bind=True)
+# TODO: nazwa funkcji
 def cleanup_setpoint_entries(self, hours):
     from aquarium.models import PointValue
     from datetime import datetime, timedelta

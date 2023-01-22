@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from api.views import UpdateSetpoints
+from aquarium.api.views import UpdateSetpoints
 from aquarium.api.viewsets import PointValueViewSet, MeasuringDeviceViewSet, ExecutiveDeviceViewSet, \
     DeviceParameterMeasuredViewSet, SetpointViewSet
 from aquarium.views import index, settings
