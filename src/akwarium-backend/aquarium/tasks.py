@@ -130,9 +130,17 @@ def check_setpoints():
 
                 # nie próbuj wyłączać grzania/chłodzenia, jeśli to nie jest aktywne
                 # lub żadne inne powiązane sekwencje nie są aktywne
+
                 if all([x.sequence_to_check.is_active for x in
                         TaskPrecedingSequence.objects.filter(executed_sequence=sequence)]):
                     sequence.is_active = True
+                    try:
+                        checked_sequence = sequence.task_sequence_executed.get().sequence_to_check
+                        checked_sequence.is_active = False
+                        checked_sequence.save()
+                    except TaskPrecedingSequence.DoesNotExist:
+                        logger.info("Brak powiązanej wstecznie sekwencji.")
+
                     sequence.save()
                     run_sequence.delay(sequence.id)
 
