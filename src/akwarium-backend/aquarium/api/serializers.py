@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from aquarium.models import PointValue, MeasuringDevice, Parameter, ExecutiveDevice, DeviceParameterMeasured
+from aquarium.models import PointValue, MeasuringDevice, Parameter, ExecutiveDevice, DeviceParameterMeasured, Setpoint
 
 
 class MeasuringDeviceSerializer(serializers.ModelSerializer):
@@ -36,3 +36,10 @@ class PointValueSerializer(serializers.ModelSerializer):
         model = PointValue
         fields = '__all__'
 
+
+class SetpointSerializer(serializers.ModelSerializer):
+    parameter = serializers.StringRelatedField()
+
+    class Meta:
+        model = Setpoint
+        exclude = ['id']

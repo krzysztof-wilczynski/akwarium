@@ -1,6 +1,43 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
     <div class="flex flex-wrap">
-        nic se kurwa nie ustawisz
+        <div class="w-full p-3 relative overflow-x-auto">
+            <table class="w-full bg-white border rounded shadow">
+                <thead class="text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Nazwa wartości</th>
+                    <th scope="col" class="px-6 py-3">Wartość zadana</th>
+                    <th scope="col" class="px-6 py-3">Nowa wartość</th>
+                </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <th scope="row" class="px-6 py-3">
+                        <input type="button" id="sendButton" value="Prześlij" class="hover:cursor-pointer
+                        bg-gray-100 py-2 px-6 rounded hover:bg-gray-700 hover:text-white transition duration-200"
+                        >
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
+{% endblock %}
+{% block script %}
+    <script>
+        (async () => {
+            const tableBody = document.getElementById('data')
+            const setpoints = await getSetpoints()
+
+            const elements = printSetpoints(setpoints);
+            elements.forEach(el => {
+                tableBody.appendChild(el)
+            })
+        })()
+    </script>
 {% endblock %}

@@ -113,3 +113,41 @@ async function updateChart(chart) {
         chart.update()
     }
 }
+
+function printSetpoints(setpoints) {
+    const elements = []
+
+    setpoints.forEach(sp => {
+        const tr = document.createElement('tr')
+        tr.classList.add('border-b')
+
+        const td1 = document.createElement('th')
+        td1.setAttribute("scope", "row")
+        td1.classList.add("px-6", "py-4", "font-medium", "text-gray-900", "whitespace-nowrap")
+        const td1text = document.createTextNode(sp.parameter)
+        td1.appendChild(td1text)
+
+        const td2 = document.createElement('td')
+        const td2text = document.createTextNode(sp.value)
+        td2.classList.add("px-6", "py-4", "text-center")
+        td2.appendChild(td2text)
+
+        const td3 = document.createElement('td')
+        td3.classList.add("px-6", "py-4")
+        const input = document.createElement('input')
+        input.classList.add("shadow", "appearance-none", "border", "rounded", "w-full", "py-2", "px-3", "text-gray-700", "leading-tight", "focus:outline-none", "focus:shadow-outline")
+        input.setAttribute("id", sp.parameter)
+        input.setAttribute("type", "number")
+        input.setAttribute("placeholder", sp.value)
+        input.setAttribute("min", "0")
+        input.setAttribute("step", "0.1")
+        td3.appendChild(input)
+
+        tr.appendChild(td1)
+        tr.appendChild(td2)
+        tr.appendChild(td3)
+
+        elements.push(tr)
+    })
+    return elements
+}

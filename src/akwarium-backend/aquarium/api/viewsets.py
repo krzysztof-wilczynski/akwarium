@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 
 from aquarium.api.serializers import PointValueSerializer, MeasuringDeviceSerializer, ExecutiveDeviceSerializer, \
-    DeviceParameterMeasuredSerializer
-from aquarium.models import PointValue, MeasuringDevice, ExecutiveDevice, DeviceParameterMeasured
+    DeviceParameterMeasuredSerializer, SetpointSerializer
+from aquarium.models import PointValue, MeasuringDevice, ExecutiveDevice, DeviceParameterMeasured, Setpoint
 
 
 class PointValueViewSet(viewsets.ModelViewSet):
@@ -53,3 +53,10 @@ class DeviceParameterMeasuredViewSet(viewsets.ModelViewSet):
             return queryset
         else:
             return DeviceParameterMeasured.objects.all()
+
+
+class SetpointViewSet(viewsets.ModelViewSet):
+    serializer_class = SetpointSerializer
+
+    queryset = Setpoint.objects.all()
+

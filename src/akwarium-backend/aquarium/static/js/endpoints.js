@@ -1,34 +1,33 @@
-async function getMetrics(id = undefined) {
+async function getMetrics(id = "") {
     try {
-        // TODO: kurwa mam jakieś zaćmienie umysłu,
-        //  to nie może tak wyglądać
-        let URL = '/api/device_parameter/'
-        if (id) {
-            URL += `?id=${id}`
-        }
-        const {data} = await axios.get(URL)
+        const {data} = await axios.get(`/api/device_parameter/${id}`)
         return data
     } catch (error) {
         console.log(error)
     }
 }
 
-async function getExecutiveDevice(id = undefined) {
+async function getExecutiveDevice(id = "") {
     try {
-        let URL = '/api/executive_device/'
-        if (id) {
-            URL += `?id=${id}`
-        }
-        const {data} = await axios.get(URL)
+        const {data} = await axios.get(`/api/executive_device/${id}`)
         return data
     } catch (error) {
         console.log(error)
     }
 }
 
-async function getPointValues(id) {
+async function getPointValues(id = "") {
     try {
         const {data} = await axios.get(`/api/point_value/?id=${id}`)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function getSetpoints(id = "") {
+    try {
+        const {data} = await axios.get(`/api/setpoint/${id}`)
         return data
     } catch (error) {
         console.log(error)

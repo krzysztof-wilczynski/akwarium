@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from aquarium.api.viewsets import PointValueViewSet, MeasuringDeviceViewSet, ExecutiveDeviceViewSet, \
-    DeviceParameterMeasuredViewSet
+    DeviceParameterMeasuredViewSet, SetpointViewSet
 from aquarium.views import index, settings
 
 app_name = 'aquarium'
@@ -12,6 +12,7 @@ router.register(r'point_value', PointValueViewSet, basename='point_value')
 router.register(r'measuring_device', MeasuringDeviceViewSet, basename='measuring_device')
 router.register(r'executive_device', ExecutiveDeviceViewSet, basename='executive_device')
 router.register(r'device_parameter', DeviceParameterMeasuredViewSet, basename='device_parameter')
+router.register(r'setpoint', SetpointViewSet, basename='setpoint')
 
 urlpatterns = [
     path('api/', include(router.urls)),
