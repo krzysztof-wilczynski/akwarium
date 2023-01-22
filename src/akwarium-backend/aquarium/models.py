@@ -68,11 +68,11 @@ class Setpoint(models.Model):
 
 class TaskSequence(models.Model):
     name = models.CharField('Nazwa sekwencji', max_length=128)
-    processed_name = models.CharField('Angielska nazwa', max_length=128)
     is_active = models.BooleanField('Czy aktywna', default=False)
-    hysteresis = models.SmallIntegerField('Histereza', default=2)
+    hysteresis = models.FloatField('Histereza', default=2)
     setpoint = models.ForeignKey(Setpoint, on_delete=models.CASCADE, null=True, blank=True,
                                  verbose_name="Powiązana wartość zadana")
+    comparator = models.CharField("Komparator", max_length=4)
 
     def __str__(self):
         return f"{self.name} - {self.is_active}"

@@ -91,20 +91,25 @@ async function updateChart(chart) {
     for (const old_label of chart.data.labels) {
         if (old_label === first_new_label) {
             break;
-        }
-        else {
+        } else {
             new_entries++
         }
     }
 
     if (new_entries > 0) {
-        chart.data.labels.push(labels.reverse().slice(0, new_entries))
         const new_data = api_data.reverse().slice(0, new_entries).map(x => x.value)
-
+        chart.data.labels.push(labels.reverse().slice(0, new_entries))
         chart.data.datasets[0].data.push(new_data)
 
         chart.data.labels = chart.data.labels.splice(new_entries)
         chart.data.datasets[0].data = chart.data.datasets[0].data.splice(new_entries)
+        chart.update()
+    } else if (new_entries <= 0 && chart.data.labels.length < 50 &&
+        chart.data.labels[chart.data.labels.length - 1] !== labels[labels.length - 1]) {
+        const new_data = api_data.reverse().splice(0, labels.length - chart.data.labels.length).map(x => x.value)
+        const new_labels = labels.reverse().splice(0, labels.length - chart.data.labels.length)
+        chart.data.labels.push.apply(chart.data.labels, new_labels.reverse())
+        chart.data.datasets[0].data.push.apply(chart.data.datasets[0].data, new_data.reverse())
         chart.update()
     }
 }

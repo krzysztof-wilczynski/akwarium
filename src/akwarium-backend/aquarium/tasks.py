@@ -114,29 +114,29 @@ def cleanup_setpoint_entries(self, hours):
 
 @shared_task()
 def check_setpoints():
-    from aquarium.models import Setpoint, PointValue
+    from aquarium.models import Setpoint, PointValue, TaskSequence, TaskPrecedingSequence
+    from aquarium.helpers.comparators import compare
 
-    setpoints = Setpoint.objects.all()
-    for setpoint in setpoints:
-        last_value = PointValue.objects.filter(
-            device_parameter__parameter__processed_name=setpoint.parameter.processed_name).last()
+    sequences = TaskSequence.objects.all()
 
-        # sekwencja powiązana z setpointem, zawsze powinna być tylko jedna
-        sequence = setpoint.tasksequence_set.first()
+    for sequence in sequences:
+        try:
+            last_value = PointValue.objects.filter(
+                device_parameter__parameter__processed_name=sequence.setpoint.parameter.processed_name).last()
 
-        print(setpoint.value, sequence.hysteresis, last_value.value, sequence.is_active)
-        if setpoint.value + sequence.hysteresis > last_value.value and sequence.is_active is False:
-            print("KURWA ZIMNO GRZEJ PLS")
-            run_sequence.delay(sequence.id)
+            if compare(sequence.setpoint.value + sequence.hysteresis, sequence.comparator,
+                       last_value.value) and sequence.is_active is False:
 
-        # if setpoint.is_max and last_value.value > setpoint.value:
-        #     # odpal taska
-        #     pass
-        #
-        # if setpoint.is_max is False and last_value.value < setpoint.value and setpoint.sequence.is_active is False:
-        #
-        # elif setpoint.is_max is False and last_value.value + histereza > setpoint.value and setpoint.sequence.is_active:
-        #     print("ALE HALO PANIE JUŻ NIE GRZEJ")
+                # nie próbuj wyłączać grzania/chłodzenia, jeśli to nie jest aktywne
+                # lub żadne inne powiązane sekwencje nie są aktywne
+                if all([x.sequence_to_check.is_active for x in
+                        TaskPrecedingSequence.objects.filter(executed_sequence=sequence)]):
+                    sequence.is_active = True
+                    sequence.save()
+                    run_sequence.delay(sequence.id)
+
+        except AttributeError or PointValue.DoesNotExist:
+            logger.info("Brak danych historycznych do porównania dla uruchomienia sekwencji.")
 
 
 @shared_task(bind=True)
@@ -151,6 +151,3 @@ def run_sequence(self, setpoint_id):
         GPIO.setup(task.device.pin, GPIO.OUT)
         GPIO.output(task.device.pin, task.output_value)
         time.sleep(task.delay)
-
-    sequence.is_active = True
-    sequence.save()

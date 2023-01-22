@@ -36,7 +36,7 @@ class DeviceParameterMeasuredAdmin(admin.ModelAdmin):
 
 @admin.register(TaskSequence)
 class TaskSequenceAdmin(admin.ModelAdmin):
-    list_display = ['name', 'hysteresis', 'is_active', 'setpoint']
+    list_display = ['name', 'hysteresis', 'comparator', 'is_active', 'setpoint']
 
 
 @admin.register(TaskSequenceStep)
