@@ -136,12 +136,18 @@ function printSetpoints(setpoints) {
         td3.classList.add("px-6", "py-4")
         const input = document.createElement('input')
         input.classList.add("shadow", "appearance-none", "border", "rounded", "w-full", "py-2", "px-3", "text-gray-700", "leading-tight", "focus:outline-none", "focus:shadow-outline")
-        input.setAttribute("id", sp.parameter)
+        input.setAttribute("id", sp.id)
         input.setAttribute("type", "number")
         input.setAttribute("placeholder", sp.value)
         input.setAttribute("min", "0")
         input.setAttribute("step", "0.1")
+
+        const errorP = document.createElement('p')
+        errorP.classList.add("text-red-500", "text-xs", "italic")
+        errorP.setAttribute('id', `error-${sp.id}`)
+
         td3.appendChild(input)
+        td3.appendChild(errorP)
 
         tr.appendChild(td1)
         tr.appendChild(td2)

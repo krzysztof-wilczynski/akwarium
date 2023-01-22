@@ -1,5 +1,9 @@
 from django.contrib import admin
 
+admin.site.site_header = "Zarządzanie akwarium"
+admin.site.site_title = "Akwarium - zarządzanie"
+admin.site.index_title = "Zarządzanie akwarium"
+
 from aquarium.models import MeasuringDevice, Parameter, PointValue, ExecutiveDevice, Setpoint, DeviceParameterMeasured, \
     TaskSequence, TaskSequenceStep, TaskPrecedingSequence
 

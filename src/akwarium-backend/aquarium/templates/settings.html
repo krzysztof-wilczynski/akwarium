@@ -38,6 +38,24 @@
             elements.forEach(el => {
                 tableBody.appendChild(el)
             })
+
+            const sendButton = document.getElementById("sendButton")
+            sendButton.addEventListener("click", () => {
+                let valid_values = true
+                const inputs = document.querySelectorAll("input:not([type='button'])")
+                for (const input of inputs) {
+                    const errorP = document.getElementById(`error-${input.id}`)
+                    errorP.innerText = ""
+                    input.classList.remove('border-red-500')
+                    if (+input.value <= 0) {
+                        input.classList.add('border-red-500')
+                        errorP.innerText = "Zadana wartość musi być większa od zera!"
+                        valid_values = false
+                    }
+                }
+
+            })
+
         })()
     </script>
 {% endblock %}

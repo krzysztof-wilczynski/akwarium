@@ -42,4 +42,4 @@ class SetpointSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Setpoint
-        exclude = ['id']
+        fields = '__all__'
